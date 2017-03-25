@@ -6,7 +6,7 @@ Uses special configuration files.
 
 #TODO: make the conf rules
 
-Default formatting style is WebKit, see [a link](webkit.org/code-style-guidelines).
+Default formatting style is WebKit, see [WebKit Code Style Guidelines](webkit.org/code-style-guidelines).
 
 Dependencies:
 
