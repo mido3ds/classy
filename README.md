@@ -8,7 +8,7 @@ Default formatting style is WebKit, see [WebKit Code Style Guidelines](webkit.or
 
 Dependencies:
 
-    .Python3.6
+    .Python3.5
     
     .Clang-Format
 
