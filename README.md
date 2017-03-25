@@ -7,15 +7,20 @@ Uses special configuration files
 Default formatting style is WebKit, see webkit.org/code-style-guidelines.
 
 Dependencies:
+
     *Python3.6
+    
     *Clang-Format
 
-Options:
+* Options:
+
+
   -h --help: 
         print help.
         
         
   .Files:
+  
       -o --out: 
             specify directory to write on (default is CWD).
 
@@ -27,6 +32,7 @@ Options:
             
             
   .Classes:
+  
     connect this class with others
   
       --parent: 
@@ -37,6 +43,7 @@ Options:
             child classes to build after this (wil be on the same directory).
             
   .Members:
+  
     methods or attributes (variables).
   
       -m --method:
