@@ -4,7 +4,11 @@ Make c++ classes nicely-formatted, quickly and in an automated way.
 
 Uses special configuration files.
 
-#TODO: make the conf rules
+* TODO: 
+
+      .make the conf rules
+
+      .how to install
 
 Default formatting style is WebKit, see [WebKit Code Style Guidelines](webkit.org/code-style-guidelines).
 
