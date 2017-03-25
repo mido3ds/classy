@@ -2,15 +2,17 @@
 
 Make c++ classes nicely-formatted, quickly and in an automated way.
 
-Uses special configuration files
+Uses special configuration files.
 
-Default formatting style is WebKit, see webkit.org/code-style-guidelines.
+#TODO: make the conf rules
+
+Default formatting style is WebKit, see [a link](webkit.org/code-style-guidelines).
 
 Dependencies:
 
-    *Python3.6
+    .Python3.6
     
-    *Clang-Format
+    .Clang-Format
 
 * Options:
 
