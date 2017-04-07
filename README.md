@@ -14,11 +14,6 @@ Dependencies:
 
 * Options:
 
-
-  -h --help: 
-        print help.
-        
-
   .Access Modifiers:
   
     add this symbol to member type to specify its accessibility.
