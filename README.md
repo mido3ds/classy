@@ -41,7 +41,8 @@ Dependencies:
 
       --child:
             child classes to build after this (wil be on the same directory).
-            
+            all virtual methods will be overriden 
+
   .Members:
   
     methods or attributes (variables).
