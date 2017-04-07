@@ -21,7 +21,7 @@ def build_parser():
     classes.add_argument('--child', nargs='+')
 
     other = parser.add_argument_group('Other')
-    other.add_argument('--style', nargs='?', choices=STYLES, default='WebKit')
+    other.add_argument('--style', nargs='?', choices=STYLES, default='WebKit', const='WebKit')
     other.add_argument('-u', '--using', nargs='+')
 
     return parser

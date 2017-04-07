@@ -43,18 +43,6 @@ Dependencies:
             child classes to build after this (wil be on the same directory).
             all virtual methods will be overriden 
 
-  .Member Type:
-  
-    methods or attributes (variables).
-  
-      -m --method:
-            class method to add (default to private).
-
-
-      -a --atr:
-            attributes to add (default to private).
-            
-            
   .Access Modifiers:
   
     add this symbol to member type to specify its accessibility.
@@ -73,7 +61,7 @@ Dependencies:
       
       --style <string>:
         give a style name from the available list.
-        
+
         available formatting styles: [LLVM, Google, Chromium, Mozilla, WebKit (default)].
 
 

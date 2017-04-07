@@ -79,7 +79,7 @@ class TestArgs(unittest.TestCase):
             self.parse('--style Mozilla WebKit')
 
         args = self.parse('--style')
-        self.assertIsNone(args.style)
+        self.assertEqual(args.style, 'WebKit')
 
     def test_using(self):
         args = self.parse('')
