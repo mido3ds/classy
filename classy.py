@@ -11,15 +11,18 @@ def build_parser():
     ''' define args, return parser'''
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-o', '--out', nargs='?', default=os.getcwd())
-    parser.add_argument('-I', '--include', nargs='+')
-    parser.add_argument('-C', '--conf', nargs='?')
+    files = parser.add_argument_group('Files')
+    files.add_argument('-o', '--out', nargs='?', default=os.getcwd())
+    files.add_argument('-I', '--include', nargs='+')
+    files.add_argument('-C', '--conf', nargs='?')
 
-    parser.add_argument('--parent', nargs='+')
-    parser.add_argument('--child', nargs='+')
+    classes = parser.add_argument_group('Classes')
+    classes.add_argument('--parent', nargs='+')
+    classes.add_argument('--child', nargs='+')
 
-    parser.add_argument('--style', nargs='?', choices=STYLES, default='WebKit')
-    parser.add_argument('-u', '--using', nargs='+')
+    other = parser.add_argument_group('Other')
+    other.add_argument('--style', nargs='?', choices=STYLES, default='WebKit')
+    other.add_argument('-u', '--using', nargs='+')
 
     return parser
 
@@ -27,6 +30,5 @@ def main(args):
     return SUCCESS
 
 if __name__=='__main__':
-    parser = build_parser()
-    args = parser.parse_args()
+    args = build_parser().parse_args()
     sys.exit(main(args))

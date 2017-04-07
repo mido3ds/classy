@@ -68,15 +68,15 @@ Dependencies:
       
       -r: protected.
       
-   .Style:
-   
-     available formatting styles: [LLVM, Google, Chromium, Mozilla, WebKit (default)].
+
+   .Other:
       
       --style <string>:
         give a style name from the available list.
+        
+        available formatting styles: [LLVM, Google, Chromium, Mozilla, WebKit (default)].
 
-   .Other:
-    
+
       -u --using:
         write using namespace <something> as global in the header file.
         

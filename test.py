@@ -45,5 +45,54 @@ class TestArgs(unittest.TestCase):
         args = self.parse('--conf habal.cf')
         self.assertEqual(args.conf, 'habal.cf')
 
+    def test_parent(self):
+        args = self.parse('')
+        self.assertEqual(args.parent, None)
+
+        args = self.parse('--parent .')
+        self.assertEqual(args.parent, ['.'])
+
+        args = self.parse('--parent habal habal2 habal3')
+        self.assertEqual(args.parent, 'habal habal2 habal3'.split())
+
+    def test_child(self):
+        args = self.parse('')
+        self.assertEqual(args.child, None)
+
+        args = self.parse('--child .')
+        self.assertEqual(args.child, ['.'])
+
+        args = self.parse('--child habal habal2 habal3')
+        self.assertEqual(args.child, 'habal habal2 habal3'.split())
+
+    def test_style(self):
+        args = self.parse('')
+        self.assertEqual(args.style, 'WebKit')
+
+        args = self.parse('--style Mozilla')
+        self.assertEqual(args.style, 'Mozilla')
+
+        with self.assertRaises(SystemExit):
+            self.parse('--style habal')
+
+        with self.assertRaises(SystemExit):
+            self.parse('--style Mozilla WebKit')
+
+        args = self.parse('--style')
+        self.assertIsNone(args.style)
+
+    def test_using(self):
+        args = self.parse('')
+        self.assertIsNone(args.using)
+
+        args = self.parse('--using .')
+        self.assertEqual(args.using, ['.'])
+
+        args = self.parse('--using habal habal2 habal3')
+        self.assertEqual(args.using, 'habal habal2 habal3'.split())
+
+        args = self.parse('-u habal habal std')
+        self.assertEqual(args.using, 'habal habal std'.split())
+
 if __name__=='__main__':
     unittest.main(verbosity=2)
