@@ -5,7 +5,7 @@ import argparse, sys, os
 
 SUCCESS = 0
 FAIL = 1
-STYLES = ["LLVM", "Google", "Chromium", "Mozilla", "WebKit"]
+STYLES = ["llvm", "google", "chromium", "mozilla", "webkit"]
 
 def build_parser():
     ''' define args, return parser'''
@@ -29,7 +29,7 @@ def build_parser():
 
     other = parser.add_argument_group('Other')
     other.add_argument('--style', nargs='?', choices=STYLES, 
-                        default='WebKit', const='WebKit')
+                        default='webkit', const='webkit')
     other.add_argument('-u', '--using', nargs='+')
 
     return parser

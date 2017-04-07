@@ -67,19 +67,19 @@ class TestArgs(unittest.TestCase):
 
     def test_style(self):
         args = self.parse('')
-        self.assertEqual(args.style, 'WebKit')
+        self.assertEqual(args.style, 'webkit')
 
-        args = self.parse('--style Mozilla')
-        self.assertEqual(args.style, 'Mozilla')
+        args = self.parse('--style mozilla')
+        self.assertEqual(args.style, 'mozilla')
 
         with self.assertRaises(SystemExit):
             self.parse('--style habal')
 
         with self.assertRaises(SystemExit):
-            self.parse('--style Mozilla WebKit')
+            self.parse('--style mozilla webkit')
 
         args = self.parse('--style')
-        self.assertEqual(args.style, 'WebKit')
+        self.assertEqual(args.style, 'webkit')
 
     def test_using(self):
         args = self.parse('')

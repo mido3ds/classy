@@ -4,7 +4,7 @@ Make c++ classes nicely-formatted, quickly and in an automated way.
 
 Uses special configuration files.
 
-Default formatting style is WebKit, see [WebKit Code Style Guidelines](webkit.org/code-style-guidelines).
+Default formatting style is webkit, see [webkit Code Style Guidelines](webkit.org/code-style-guidelines).
 
 Dependencies:
 
@@ -64,7 +64,7 @@ Dependencies:
       --style <string>:
         give a style name from the available list.
 
-        available formatting styles: [LLVM, Google, Chromium, Mozilla, WebKit (default)].
+        available formatting styles: [llvm, google, chromium, mozilla, webkit (default)].
 
 
       -u --using:
