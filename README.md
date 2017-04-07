@@ -18,9 +18,7 @@
 
   1. Access Modifiers:
   
-    add this symbol to member type to specify its accessibility.
-    
-    ex. -p 'void read()' # protected void method `read`
+    ex. -p `void read()` # protected void method read
   
   
       -b: public.
@@ -31,7 +29,10 @@
         
 
   2. Files:
-  
+
+    directories and header files  
+
+
       -o --out: 
             specify directory to write on (default is CWD).
 
@@ -45,6 +46,7 @@
   3. Classes:
   
     connect this class with others
+
   
       --parent: 
             parent class[es] to inherent from.
@@ -55,8 +57,10 @@
             all virtual methods will be overriden 
 
       
-
    4. Other:
+
+     misc.
+     
       
       --style <string>:
         give a style name from the available list.
@@ -65,5 +69,5 @@
 
 
       -u --using:
-        write using namespace <something> as global in the header file.
+         write using namespace <something> as global in the header file.
         
