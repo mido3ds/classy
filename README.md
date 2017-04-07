@@ -43,7 +43,7 @@ Dependencies:
             child classes to build after this (wil be on the same directory).
             all virtual methods will be overriden 
 
-  .Members:
+  .Member Type:
   
     methods or attributes (variables).
   
@@ -70,9 +70,13 @@ Dependencies:
       
    .Style:
    
-    available formatting styles: [LLVM, Google, Chromium, Mozilla, WebKit (default)].
+     available formatting styles: [LLVM, Google, Chromium, Mozilla, WebKit (default)].
       
-      --style=<string>:
+      --style <string>:
         give a style name from the available list.
-        
+
+   .Other:
+    
+      -u --using:
+        write using namespace <something> as global in the header file.
         
