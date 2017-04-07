@@ -11,6 +11,8 @@ def build_parser():
     ''' define args, return parser'''
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('class_name')
+
     access = parser.add_argument_group('Access Modifiers')
     access.add_argument('-b', '--public', nargs='+', action='append')
     access.add_argument('-p', '--private', nargs='+', action='append')
