@@ -1,11 +1,14 @@
 #!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
 """create c++ classes automatically"""
-import argparse, sys, os
+import argparse
+import sys
+import os
 
 SUCCESS = 0
 FAIL = 1
 STYLES = ["llvm", "google", "chromium", "mozilla", "webkit"]
+
 
 def build_parser():
     ''' define args, return parser'''
@@ -28,15 +31,16 @@ def build_parser():
     classes.add_argument('--child', nargs='+')
 
     other = parser.add_argument_group('Other')
-    other.add_argument('--style', nargs='?', choices=STYLES, 
-                        default='webkit', const='webkit')
+    other.add_argument('--style', nargs='?', choices=STYLES,
+                       default='webkit', const='webkit')
     other.add_argument('-u', '--using', nargs='+')
 
     return parser
 
+
 def main(args):
     return SUCCESS
 
-if __name__=='__main__':
+if __name__ == '__main__':
     args = build_parser().parse_args()
     sys.exit(main(args))

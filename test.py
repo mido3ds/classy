@@ -1,13 +1,20 @@
 #!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
-import unittest, classy, os
+import unittest
+import classy
+import os
+
 
 class TestArgs(unittest.TestCase):
+
     def setUp(self):
         self.parser = classy.build_parser()
 
     def parse(self, string):
-        return self.parser.parse_args(string.split())
+        # fake class name should be added to every arg line 
+        # as class_name is required
+        result = ['FakeClassName'] + string.split()
+        return self.parser.parse_args(result)
 
     def test_include(self):
         args = self.parse('')
@@ -94,5 +101,5 @@ class TestArgs(unittest.TestCase):
         args = self.parse('-u habal habal std')
         self.assertEqual(args.using, 'habal habal std'.split())
 
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main(verbosity=2)
