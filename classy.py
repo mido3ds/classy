@@ -38,6 +38,16 @@ def build_parser():
     return parser
 
 
+def make_header_guards(class_name):
+    ''' return top and down header guards of class name '''
+    class_name = '__{}_H__'.format(class_name.upper())
+
+    top = '#ifndef {0}\n#define {0}\n'.format(class_name)
+    down = '\n#endif  /* {} */'.format(class_name)
+
+    return top, down
+
+
 def main(args):
     return SUCCESS
 
