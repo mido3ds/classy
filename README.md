@@ -1,8 +1,8 @@
-# Classy (in construction)
+# Classy #
 
 > Make c++ classes nicely-formatted, quickly and in an automated way.
 
-> From the CommandLine or use special configuration files.
+> Runs from the command line or reads special configuration files.
 
 > Default formatting style is webkit, see [webkit Code Style Guidelines](webkit.org/code-style-guidelines).
 
@@ -60,7 +60,7 @@
    4. Other:
 
      misc.
-     
+
       
       --style <string>:
         give a style name from the available list.
