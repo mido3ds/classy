@@ -5,7 +5,7 @@ import argparse, sys, os
 
 SUCCESS = 0
 
-def make_parser():
+def build_parser():
     ''' define args, return parser'''
     parser = argparse.ArgumentParser()
 
@@ -18,6 +18,6 @@ def main(args):
     return SUCCESS
 
 if __name__=='__main__':
-    parser = make_parser()
+    parser = build_parser()
     args = parser.parse_args()
     sys.exit(main(args))

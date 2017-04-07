@@ -4,7 +4,7 @@ import unittest, classy, os
 
 class TestArgs(unittest.TestCase):
     def setUp(self):
-        self.parser = classy.make_parser()
+        self.parser = classy.build_parser()
 
     def parse(self, string):
         return self.parser.parse_args(string.split())
