@@ -11,7 +11,6 @@ def make_parser():
 
     parser.add_argument('-o', '--out', nargs='?', default=os.getcwd())
     parser.add_argument('-I', '--include', nargs='+')
-    # parser.add_argument()
 
     return parser
 
@@ -21,6 +20,4 @@ def main(args):
 if __name__=='__main__':
     parser = make_parser()
     args = parser.parse_args()
-
-    print(args) # test
     sys.exit(main(args))
