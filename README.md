@@ -1,20 +1,22 @@
 # Classy (in construction)
 
-Make c++ classes nicely-formatted, quickly and in an automated way.
+> Make c++ classes nicely-formatted, quickly and in an automated way.
 
-Uses special configuration files.
+> From the CommandLine or use special configuration files.
 
-Default formatting style is webkit, see [webkit Code Style Guidelines](webkit.org/code-style-guidelines).
+> Default formatting style is webkit, see [webkit Code Style Guidelines](webkit.org/code-style-guidelines).
 
-Dependencies:
+
+* Dependencies:
 
     .Python3.5
     
     .Clang-Format
 
+
 * Options:
 
-  .Access Modifiers:
+  1. Access Modifiers:
   
     add this symbol to member type to specify its accessibility.
     
@@ -28,7 +30,7 @@ Dependencies:
       -r: protected.
         
 
-  .Files:
+  2. Files:
   
       -o --out: 
             specify directory to write on (default is CWD).
@@ -40,7 +42,7 @@ Dependencies:
             build from configuration file.
             
             
-  .Classes:
+  3. Classes:
   
     connect this class with others
   
@@ -54,7 +56,7 @@ Dependencies:
 
       
 
-   .Other:
+   4. Other:
       
       --style <string>:
         give a style name from the available list.
