@@ -11,6 +11,9 @@ def build_parser():
 
     parser.add_argument('-o', '--out', nargs='?', default=os.getcwd())
     parser.add_argument('-I', '--include', nargs='+')
+    parser.add_argument('-C', '--conf', nargs='?')
+
+    
 
     return parser
 

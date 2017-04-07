@@ -32,5 +32,18 @@ class TestArgs(unittest.TestCase):
         args = self.parse('--out habal')
         self.assertEqual(args.out, 'habal')
 
+    def test_conf(self):
+        args = self.parse('-C .')
+        self.assertEqual(args.conf, '.')
+
+        args = self.parse('')
+        self.assertEqual(args.conf, None)
+
+        args = self.parse('--conf .')
+        self.assertEqual(args.conf, '.')
+
+        args = self.parse('--conf habal.cf')
+        self.assertEqual(args.conf, 'habal.cf')
+
 if __name__=='__main__':
     unittest.main(verbosity=2)
