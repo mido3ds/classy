@@ -18,7 +18,21 @@ Dependencies:
   -h --help: 
         print help.
         
+
+  .Access Modifiers:
+  
+    add this symbol to member type to specify its accessibility.
+    
+    ex. -p 'void read()' # protected void method `read`
+  
+  
+      -b: public.
+      
+      -p: private.
+      
+      -r: protected.
         
+
   .Files:
   
       -o --out: 
@@ -43,18 +57,6 @@ Dependencies:
             child classes to build after this (wil be on the same directory).
             all virtual methods will be overriden 
 
-  .Access Modifiers:
-  
-    add this symbol to member type to specify its accessibility.
-    
-    ex. -mp read # protected void method `read`
-  
-  
-      -b: public.
-      
-      -p: private (default).
-      
-      -r: protected.
       
 
    .Other:
