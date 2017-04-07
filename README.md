@@ -7,20 +7,19 @@
 > Default formatting style is webkit, see [webkit Code Style Guidelines](webkit.org/code-style-guidelines).
 
 
-* Dependencies:
-
+## Dependencies:
     .Python3.5
-    
+
     .Clang-Format
 
 
-* Options:
+## Options:
 
   1. Access Modifiers:
   
-    ex. -p `void read()` # protected void method read
+    ex. -p '`void read()`' # protected void method read
   
-  
+
       -b: public.
       
       -p: private.
@@ -31,7 +30,6 @@
   2. Files:
 
     directories and header files  
-
 
       -o --out: 
             specify directory to write on (default is CWD).
