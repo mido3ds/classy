@@ -4,6 +4,7 @@
 import argparse, sys, os
 
 SUCCESS = 0
+FAIL = 1
 STYLES = ["LLVM", "Google", "Chromium", "Mozilla", "WebKit"]
 
 def build_parser():
@@ -18,6 +19,7 @@ def build_parser():
     parser.add_argument('--child', nargs='+')
 
     parser.add_argument('--style', nargs='?', choices=STYLES, default='WebKit')
+    parser.add_argument('-u', '--using', nargs='+')
 
     return parser
 
