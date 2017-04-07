@@ -1,17 +1,18 @@
 #!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
-"""Classy, create c++ classes automatically"""
+"""create c++ classes automatically"""
 import argparse, sys
 
-class ArgumentParser(argparse.ArgumentParser):
-    def __init__(self, *args, **kwargs):
-        super(ArgumentParser, self).__init(args, kwargs)
+SUCCESS = 0
 
-        # add arguments
+def get_args():
+    ''' define args and parse them, returns args '''
+    parser = argparse.ArgumentParser()
+    return parser.parse_args()
 
 def main(args):
-    return 0
+    return SUCCESS
 
 if __name__=='__main__':
-    args = ArgumentParser().parse_args()
+    args = get_args()
     sys.exit(main(args))

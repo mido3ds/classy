@@ -28,7 +28,7 @@ Dependencies:
             header files to include (inhereted classes will be included automatically).
             
       -C --conf:
-            builc from configuration file.
+            build from configuration file.
             
             
   .Classes:
