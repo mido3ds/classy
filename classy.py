@@ -163,15 +163,26 @@ class ClassCreator:
         if self.args.parent:
             self.parents.extend(self.args.parent)
 
-    def _get_hash_include(self, file, std=False):
+    def _get_hash_include(self, include_file, std=False):
         if std:
-            return '#include <{}>'.format(file)
+            return '#include <{}>'.format(include_file)
         else:
-            return '#include "{}"'.format(file)
+            return '#include "{}.h"'.format(include_file)
 
     def _get_all_includes(self):
         ''' return string of all includes that should be in header file '''
-        pass
+        if self.args.include:
+            includes = self.args.include
+            results = []
+
+            for include in includes:
+                # TODO: detect whther it is std or not
+                results.append(self._get_hash_include(include))
+
+            return '\n'.join(result for result in results)
+
+    def _get_include_this_header(self):
+        return self._get_hash_include(self.name)
 
 ######################################################################
 
