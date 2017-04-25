@@ -2,12 +2,18 @@
 # -*- coding: utf-8 -*-
 """create c++ classes automatically"""
 import argparse
-import sys
 import os
+import re
+import sys
 ######################################################################
 SUCCESS = 0
 FAIL = 1
 AVAILABLE_STYLES = ["llvm", "google", "chromium", "mozilla", "webkit"]
+
+# #0: type, #1: name, #2: args, #?3: const|override|=0
+REGEX_FUNC = re.compile(r'(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
+# #?0: unsigned or const, #1: type, #2: name, #?3: value
+REGEX_MEMBER = re.compile(r'(const|unsigned)? ?(\w+) (\w+) ?=? ?(\w+)?')
 ######################################################################
 
 
@@ -47,16 +53,47 @@ class Method:
     ''' method info '''
     name = None
     return_type = None
-    args = []
+    args = None
     is_virtual = False
     access = None
 
+    def __init__(self, string, access):
+        ''' parse given string into a method '''
+        self.access = access
+        self.is_virtual = False  # TODO: add ability to make virtual
+
+        try:
+            tokens = re.findall(REGEX_FUNC, string)[0]
+        except IndexError:
+            raise Exception('exception in parsing the string {}'
+                            ' to a method'.format(string))
+
+        self.return_type = tokens[0]
+        self.name = tokens[1]
+        self.args = tokens[2]  # TODO: parse args
+        # TODO: parse others
+
 
 class Variable:
-    ''' member info '''
+    ''' variable info '''
     type = None
     default_value = None
     name = None
+
+    def __init__(self, string):
+        ''' parse given string into a variable '''
+        try:
+            tokens = re.findall(REGEX_MEMBER, string)[0]
+        except IndexError:
+            raise Exception('exception in parsing the string {}'
+                            ' to a variable'.format(string))
+
+        if tokens[0]:
+            self.type = tokens[0] + ' ' + tokens[1]
+        else:
+            self.type = tokens[1]
+        self.name = tokens[2]
+        self.default_value = tokens[3] or None
 
 ######################################################################
 
@@ -67,11 +104,13 @@ class ClassCreator:
     hdr = None
 
     name = None
-    parents = None
-    methods = None
-    variables = None
+    parents = []
+    methods = []
+    variables = []
 
     def __init__(self, args):
+        self.args = args
+        self._create_members()
         pass
 
     def create_header_file(self):
@@ -100,7 +139,20 @@ class ClassCreator:
         return top, down
 
     def _create_members(self):
-        pass
+        for access in ['public', 'protected', 'private']:
+            members = getattr(self.args, access) or []
+
+            # as public, private and protected are lists of lists,
+            # plz blame ArgumentParser
+            for sub_members in members:
+                for member in sub_members:
+                    if '(' in member:  # method
+                        method = Method(member, access)
+                        self.methods.append(method)
+                    else:  # variable
+                        var = Variable(member)
+                        self.variables.append(var)
+
 
 ######################################################################
 
