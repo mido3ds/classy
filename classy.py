@@ -48,6 +48,14 @@ def make_header_guards(class_name):
     return top, down
 
 
+def make_header_file(class_name, methods, members):
+    pass
+
+
+def make_src_file(class_name, methods, members):
+    pass
+
+
 def main(args):
     return SUCCESS
 
