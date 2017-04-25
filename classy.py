@@ -110,8 +110,9 @@ class ClassCreator:
 
     def __init__(self, args):
         self.args = args
+
         self._create_members()
-        pass
+        self._create_parents()
 
     def create_header_file(self):
         ''' stores string of header file '''
@@ -139,6 +140,9 @@ class ClassCreator:
         return top, down
 
     def _create_members(self):
+        ''' iterate through members strings for all access_identifiers
+         and parse them into Method/Variable object'''
+
         for access in ['public', 'protected', 'private']:
             members = getattr(self.args, access) or []
 
@@ -153,6 +157,21 @@ class ClassCreator:
                         var = Variable(member)
                         self.variables.append(var)
 
+    def _create_parents(self):
+        ''' add parents if found '''
+
+        if self.args.parent:
+            self.parents.extend(self.args.parent)
+
+    def _get_hash_include(self, file, std=False):
+        if std:
+            return '#include <{}>'.format(file)
+        else:
+            return '#include "{}"'.format(file)
+
+    def _get_all_includes(self):
+        ''' return string of all includes that should be in header file '''
+        pass
 
 ######################################################################
 
@@ -174,4 +193,5 @@ def main(args):
 
 if __name__ == '__main__':
     args = build_parser().parse_args()
+    print(args)
     sys.exit(main(args))
