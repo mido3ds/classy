@@ -52,15 +52,7 @@ class Method:
     access = None
 
 
-class Class:
-    ''' Class info '''
-    name = None
-    parents = None
-    methods = None
-    members = None
-
-
-class Member:
+class Variable:
     ''' member info '''
     type = None
     default_value = None
@@ -73,6 +65,11 @@ class ClassCreator:
     ''' takes args from parser and constructs files '''
     src = None
     hdr = None
+
+    name = None
+    parents = None
+    methods = None
+    variables = None
 
     def __init__(self, args):
         pass
@@ -95,12 +92,15 @@ class ClassCreator:
 
     def _get_header_guards(self):
         ''' return top and down header guards of class name '''
-        self.class_name = '__{}_H__'.format(self.class_name.upper())
+        part = '__{}_H__'.format(self.name.upper())
 
-        top = '#ifndef {0}\n#define {0}\n'.format(self.class_name)
-        down = '\n#endif  /* {} */'.format(self.class_name)
+        top = '#ifndef {0}\n#define {0}\n'.format(part)
+        down = '\n#endif  /* {} */'.format(part)
 
         return top, down
+
+    def _create_members(self):
+        pass
 
 ######################################################################
 
