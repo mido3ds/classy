@@ -1,4 +1,4 @@
-# Classy #
+# WIP: Classy #
 
 > Make c++ classes nicely-formatted, quickly and in an automated way.
 >
