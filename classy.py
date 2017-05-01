@@ -73,6 +73,9 @@ class Method:
         self.args = tokens[2]  # TODO: parse args
         # TODO: parse others
 
+    def __str__(self):
+        return ''
+
 
 class Variable:
     ''' variable info '''
@@ -95,6 +98,9 @@ class Variable:
         self.name = tokens[2]
         self.default_value = tokens[3] or None
 
+    def __str__(self):
+        return ''
+
 ######################################################################
 
 
@@ -116,7 +122,31 @@ class ClassCreator:
 
     def create_header_file(self):
         ''' stores string of header file '''
-        pass
+        top, bottom = self._get_header_guards()
+        includes = self._get_all_includes()
+
+        self.hdr = """\
+        {top}
+        {includes}
+        
+        class {class_name}
+        \{
+        public:
+            {public_members}
+        protected:
+            {protected_members}
+        private:
+            {private_members}
+        };
+
+        {bottom}
+        """.format(
+            top=top, includes=includes, 
+            bottom=bottom, class_name=self.name,
+            public_members='',
+            private_members='',
+            protected_members=''
+        ) # TODO: format members
 
     def create_source_file(self):
         ''' stores string of source file '''
