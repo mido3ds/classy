@@ -136,6 +136,8 @@ class ClassCreator:
         top, bottom = self._get_header_guards()
         includes = self._get_all_includes()
 
+        # TODO: make includes appear if not None, else not added at all
+        # TODO: only add acces modifiers tags when there's one at least member available
         self.hdr = """{top}
 {includes}
 
@@ -160,7 +162,7 @@ private:
             ),
             
             # TODO: add support for private and protected methods
-            private_members='\n\t'.join(
+            private_members='\n    '.join(
                 str(var) for var in self.variables
             ),
             protected_members='', # TODO: nothing in protected yet
