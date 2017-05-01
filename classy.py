@@ -73,8 +73,14 @@ class Method:
         self.args = tokens[2]  # TODO: parse args
         # TODO: parse others
 
-    def __str__(self):
-        return ''
+    def get_prototype(self):
+        if self.is_virtual:
+            return 'virtual' + self.return_type + ' ' + self.name + '(' + self.args + ');'
+        else:
+            return self.return_type + ' ' + self.name + '(' + self.args + ');'
+
+    def get_decleration(self):
+        pass
 
 
 class Variable:
@@ -99,7 +105,10 @@ class Variable:
         self.default_value = tokens[3] or None
 
     def __str__(self):
-        return ''
+        if self.default_value:
+            return str(self.type + ' ' + self.name + ' = ' + self.default_value + ';')
+        else:
+            return str(self.type + ' ' + self.name + ';')
 
 ######################################################################
 
@@ -117,6 +126,8 @@ class ClassCreator:
     def __init__(self, args):
         self.args = args
 
+        self.name = args.class_name
+
         self._create_members()
         self._create_parents()
 
@@ -125,28 +136,35 @@ class ClassCreator:
         top, bottom = self._get_header_guards()
         includes = self._get_all_includes()
 
-        self.hdr = """\
-        {top}
-        {includes}
-        
-        class {class_name}
-        \{
-        public:
-            {public_members}
-        protected:
-            {protected_members}
-        private:
-            {private_members}
-        };
+        self.hdr = """{top}
+{includes}
 
-        {bottom}
+class {class_name}
+{{
+public:
+    {public_members}
+protected:  
+    {protected_members}
+private:    
+    {private_members}
+}};
+
+{bottom}
         """.format(
-            top=top, includes=includes, 
+            top=top, includes=includes,
             bottom=bottom, class_name=self.name,
-            public_members='',
-            private_members='',
-            protected_members=''
-        ) # TODO: format members
+
+            # TODO: add support for public variables
+            public_members='\n    '.join(
+                meth.get_prototype() for meth in self.methods if meth.access == 'public'
+            ),
+            
+            # TODO: add support for private and protected methods
+            private_members='\n\t'.join(
+                str(var) for var in self.variables
+            ),
+            protected_members='', # TODO: nothing in protected yet
+        )  # TODO: format members
 
     def create_source_file(self):
         ''' stores string of source file '''
