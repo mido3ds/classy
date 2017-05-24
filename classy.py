@@ -5,26 +5,14 @@ import argparse
 import os
 import re
 import sys
+import json
 ######################################################################
-SUCCESS = 0
-FAIL = 1
-AVAILABLE_STYLES = ["llvm", "google", "chromium", "mozilla", "webkit"]
+CONSTANTS = json.load(open('data.json'))
 
 # #0: type, #1: name, #2: args, #?3: const|override|=0
 REGEX_FUNC = re.compile(r'(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
 # #?0: unsigned or const, #1: type, #2: name, #?3: value
 REGEX_MEMBER = re.compile(r'(const|unsigned)? ?(\w+) (\w+) ?=? ?(\w+)?')
-
-HEADER_TEMPLATE = """\
-{top}
-{includes}
-class {class_name} 
-{{
-{members}
-}};
-
-{bottom}
-"""
 ######################################################################
 
 
@@ -51,7 +39,7 @@ def build_parser():
     classes.add_argument('--child', nargs='+')
 
     other = parser.add_argument_group('Other')
-    other.add_argument('--style', nargs='?', choices=AVAILABLE_STYLES,
+    other.add_argument('--style', nargs='?', choices=CONSTANTS['AVAILABLE_STYLES'],
                        default='webkit', const='webkit')
     other.add_argument('-u', '--using', nargs='+')
 
@@ -101,7 +89,7 @@ class Variable:
     name = None
     access = None
 
-    def __init__(self, string, access): 
+    def __init__(self, string, access):
         ''' parse given string into a variable '''
         try:
             tokens = re.findall(REGEX_MEMBER, string)[0]
@@ -148,14 +136,14 @@ class ClassCreator:
         ''' stores string of header file in hdr '''
         top, bottom = self._get_header_guards()
 
-        self.hdr = HEADER_TEMPLATE.format(
-            top=top, 
+        self.hdr = CONSTANTS['HEADER_TEMPLATE'].format(
+            top=top,
             includes=self._get_all_includes(),
 
             class_name=self.name,
             members='\n\n'.join(
                 filter(
-                    lambda x: x != '' ,
+                    lambda x: x != '',
                     [self._get_members_definitions(access) for access in ['public', 'protected', 'private']]
                 )
             ),
@@ -171,12 +159,16 @@ class ClassCreator:
         ''' return str of members definitions of access modifier '''
 
         head = access_specifier + ':' '\n    '
-        methods = '\n    '.join([method.get_prototype() for method in self.methods if method.access == access_specifier])
-        vars = '\n    '.join([str(variable) for variable in self.variables if variable.access == access_specifier])
-        
-        if not (methods or vars): return ''
-        return  head + methods + ('\n    ' if methods and vars else '') + vars
+        methods = '\n    '.join(
+            [method.get_prototype() for method in self.methods if method.access == access_specifier]
+        )
+        vars = '\n    '.join(
+            [str(variable) for variable in self.variables if variable.access == access_specifier]
+        )
 
+        if not (methods or vars):
+            return ''
+        return head + methods + ('\n    ' if methods and vars else '') + vars
 
     def write_files(self):
         ''' writes src & hdr to out directory '''
@@ -220,7 +212,7 @@ class ClassCreator:
             self.parents.extend(self.args.parent)
 
     def _get_hash_include(self, include_file):
-        if False:
+        if include_file in CONSTANTS['STD_LIBRARIES']:
             return '#include <{}>'.format(include_file)
         else:
             return '#include "{}"'.format(include_file)
@@ -232,10 +224,9 @@ class ClassCreator:
             results = []
 
             for include in includes:
-                # TODO: detect whther it is std or not
                 results.append(self._get_hash_include(include))
 
-            return '\n' + '\n'.join(result for result in results) + '\n'
+            return '\n' + '\n'.join(results) + '\n'
         else:
             return ''
 
@@ -249,8 +240,10 @@ def main(args):
     creator = ClassCreator(args)
 
     # create
-    creator.create_header_file(); print(creator.hdr)
+    creator.create_header_file()
     creator.create_source_file()
+
+    print(creator.hdr)
 
     # write
     creator.write_files()
@@ -258,7 +251,7 @@ def main(args):
     # style
     creator.stylize_files()
 
-    return SUCCESS
+    return 0
 
 if __name__ == '__main__':
     args = build_parser().parse_args()
