@@ -15,10 +15,10 @@ REGEX_FUNC = re.compile(r'(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
 # #?0: unsigned or const, #1: type, #2: name, #?3: value
 REGEX_MEMBER = re.compile(r'(const|unsigned)? ?(\w+) (\w+) ?=? ?(\w+)?')
 
-HEADER_TEMPLATE = """{top}
+HEADER_TEMPLATE = """\
+{top}
 {includes}
-
-class {class_name}
+class {class_name} 
 {{
 {members}
 }};
@@ -144,29 +144,38 @@ class ClassCreator:
         self._create_parents()
 
     def create_header_file(self):
-        ''' stores string of header file '''
+        ''' stores string of header file in hdr '''
         top, bottom = self._get_header_guards()
-        includes = self._get_all_includes()
 
-        def _get_definitions(access_specifier):
-            head = access_specifier + ':' '\n    '
-            methods = '\n    '.join([method.get_prototype() for method in self.methods if method.access == access_specifier])
-            vars = '\n    '.join([str(variable) for variable in self.variables if variable.access == access_specifier])
-            
-            if not (methods or vars): return ''
-            return  head + methods + ('\n    ' if methods else '') + vars + ('\n    ' if vars else '')
-
-        # TODO: make includes appear if not None, else not added at all
         self.hdr = HEADER_TEMPLATE.format(
-            top=top, includes=includes,
-            bottom=bottom, class_name=self.name,
+            top=top, 
+            includes=self._get_all_includes(),
 
-            members=''.join(_get_definitions(access) for access in ['public', 'protected', 'private']),
+            class_name=self.name,
+            members='\n\n'.join(
+                filter(
+                    lambda x: x != '' ,
+                    [self._get_members_definitions(access) for access in ['public', 'protected', 'private']]
+                )
+            ),
+
+            bottom=bottom,
         )
 
     def create_source_file(self):
-        ''' stores string of source file '''
+        ''' stores string of source file in src '''
         pass
+
+    def _get_members_definitions(self, access_specifier):
+        ''' return str of members definitions of access modifier '''
+
+        head = access_specifier + ':' '\n    '
+        methods = '\n    '.join([method.get_prototype() for method in self.methods if method.access == access_specifier])
+        vars = '\n    '.join([str(variable) for variable in self.variables if variable.access == access_specifier])
+        
+        if not (methods or vars): return ''
+        return  head + methods + ('\n    ' if methods and vars else '') + vars
+
 
     def write_files(self):
         ''' writes src & hdr to out directory '''
@@ -180,8 +189,8 @@ class ClassCreator:
         ''' return top and down header guards of class name '''
         part = '__{}_H__'.format(self.name.upper())
 
-        top = '#ifndef {0}\n#define {0}\n'.format(part)
-        down = '\n#endif  /* {} */'.format(part)
+        top = '#ifndef {0}\n#define {0}'.format(part)
+        down = '#endif  /* {} */'.format(part)
 
         return top, down
 
@@ -225,7 +234,9 @@ class ClassCreator:
                 # TODO: detect whther it is std or not
                 results.append(self._get_hash_include(include))
 
-            return '\n'.join(result for result in results)
+            return '\n' + '\n'.join(result for result in results) + '\n'
+        else:
+            return ''
 
     def _get_include_this_header(self):
         return self._get_hash_include(self.name)
@@ -250,5 +261,4 @@ def main(args):
 
 if __name__ == '__main__':
     args = build_parser().parse_args()
-    print(args)
     sys.exit(main(args))
