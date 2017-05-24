@@ -7,7 +7,7 @@ import re
 import sys
 import json
 ######################################################################
-CONSTANTS = json.load(open('data.json'))
+CONSTANTS = json.load(open('constants.json'))
 
 # #0: type, #1: name, #2: args, #?3: const|override|=0
 REGEX_FUNC = re.compile(r'(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
