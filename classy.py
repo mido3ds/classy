@@ -14,6 +14,17 @@ AVAILABLE_STYLES = ["llvm", "google", "chromium", "mozilla", "webkit"]
 REGEX_FUNC = re.compile(r'(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
 # #?0: unsigned or const, #1: type, #2: name, #?3: value
 REGEX_MEMBER = re.compile(r'(const|unsigned)? ?(\w+) (\w+) ?=? ?(\w+)?')
+
+HEADER_TEMPLATE = """{top}
+{includes}
+
+class {class_name}
+{{
+{members}
+}};
+
+{bottom}
+"""
 ######################################################################
 
 
@@ -88,8 +99,9 @@ class Variable:
     type = None
     default_value = None
     name = None
+    access = 'public' # TODO add access to variable
 
-    def __init__(self, string):
+    def __init__(self, string): 
         ''' parse given string into a variable '''
         try:
             tokens = re.findall(REGEX_MEMBER, string)[0]
@@ -136,37 +148,21 @@ class ClassCreator:
         top, bottom = self._get_header_guards()
         includes = self._get_all_includes()
 
+        def _get_definitions(access_specifier):
+            head = access_specifier + ':' '\n    '
+            methods = '\n    '.join([method.get_prototype() for method in self.methods if method.access == access_specifier])
+            vars = '\n    '.join([str(variable) for variable in self.variables if variable.access == access_specifier])
+            
+            if not (methods or vars): return ''
+            return  head + methods + ('\n    ' if methods else '') + vars + ('\n    ' if vars else '')
+
         # TODO: make includes appear if not None, else not added at all
-        # TODO: only add acces modifiers tags when there's one at least member available
-        self.hdr = """{top}
-{includes}
-
-class {class_name}
-{{
-public:
-    {public_members}
-protected:  
-    {protected_members}
-private:    
-    {private_members}
-}};
-
-{bottom}
-        """.format(
+        self.hdr = HEADER_TEMPLATE.format(
             top=top, includes=includes,
             bottom=bottom, class_name=self.name,
 
-            # TODO: add support for public variables
-            public_members='\n    '.join(
-                meth.get_prototype() for meth in self.methods if meth.access == 'public'
-            ),
-            
-            # TODO: add support for private and protected methods
-            private_members='\n    '.join(
-                str(var) for var in self.variables
-            ),
-            protected_members='', # TODO: nothing in protected yet
-        )  # TODO: format members
+            members=''.join(_get_definitions(access) for access in ['public', 'protected', 'private']),
+        )
 
     def create_source_file(self):
         ''' stores string of source file '''
@@ -241,7 +237,7 @@ def main(args):
     creator = ClassCreator(args)
 
     # create
-    creator.create_header_file()
+    creator.create_header_file(); print(creator.hdr)
     creator.create_source_file()
 
     # write
