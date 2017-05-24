@@ -99,9 +99,9 @@ class Variable:
     type = None
     default_value = None
     name = None
-    access = 'public' # TODO add access to variable
+    access = None
 
-    def __init__(self, string): 
+    def __init__(self, string, access): 
         ''' parse given string into a variable '''
         try:
             tokens = re.findall(REGEX_MEMBER, string)[0]
@@ -115,6 +115,7 @@ class Variable:
             self.type = tokens[1]
         self.name = tokens[2]
         self.default_value = tokens[3] or None
+        self.access = access
 
     def __str__(self):
         if self.default_value:
@@ -209,7 +210,7 @@ class ClassCreator:
                         method = Method(member, access)
                         self.methods.append(method)
                     else:  # variable
-                        var = Variable(member)
+                        var = Variable(member, access)
                         self.variables.append(var)
 
     def _create_parents(self):
@@ -218,11 +219,11 @@ class ClassCreator:
         if self.args.parent:
             self.parents.extend(self.args.parent)
 
-    def _get_hash_include(self, include_file, std=False):
-        if std:
+    def _get_hash_include(self, include_file):
+        if False:
             return '#include <{}>'.format(include_file)
         else:
-            return '#include "{}.h"'.format(include_file)
+            return '#include "{}"'.format(include_file)
 
     def _get_all_includes(self):
         ''' return string of all includes that should be in header file '''
