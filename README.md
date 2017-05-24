@@ -12,6 +12,7 @@
 
     .Clang-Format
 
+![UML diagram](UMLdiagram.png?raw=true "UML diagram")
 
 ## Options:
 
