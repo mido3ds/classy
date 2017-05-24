@@ -1,4 +1,4 @@
-# WIP: Classy #
+# [WIP]: Classy #
 
 > Make c++ classes nicely-formatted, quickly and in an automated way.
 >
@@ -12,7 +12,16 @@
 
     .Clang-Format
 
+## How it is built:
+
+. main makes a parser for the commandline using `argparse` module
+
+. ClassCreator is responsibile for the Creation of the Class with all its info
+
+. objects of Variable and Method are created to store their info 
+
 ![UML diagram](UMLdiagram.png?raw=true "UML diagram")
+
 
 ## Options:
 
