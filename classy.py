@@ -10,7 +10,8 @@ import json
 CONSTANTS = json.load(open('constants.json'))
 
 # #0: type, #1: name, #2: args, #?3: const|override|=0
-REGEX_FUNC = re.compile(r'(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
+REGEX_FUNC = re.compile(
+    r'(virtual)? ?(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
 # #?0: unsigned or const, #1: type, #2: name, #?3: value
 REGEX_MEMBER = re.compile(r'(const|unsigned)? ?(\w+) (\w+) ?=? ?(\w+)?')
 ######################################################################
@@ -55,11 +56,11 @@ class Method:
     args = None
     is_virtual = False
     access = None
+    last = None # const|override|= 0
 
     def __init__(self, string, access):
         ''' parse given string into a method '''
         self.access = access
-        self.is_virtual = False  # TODO: add ability to make virtual
 
         try:
             tokens = re.findall(REGEX_FUNC, string)[0]
@@ -67,16 +68,23 @@ class Method:
             raise Exception('exception in parsing the string {}'
                             ' to a method'.format(string))
 
-        self.return_type = tokens[0]
-        self.name = tokens[1]
-        self.args = tokens[2]  # TODO: parse args
-        # TODO: parse others
+        self.is_virtual = tokens[0] == 'virtual'
+        self.return_type = tokens[1]
+        self.name = tokens[2]
+
+        # parse args into a list
+        self.args = list(
+            filter(
+                lambda x: x != '', [part.strip(' ')
+                                    for part in tokens[3].split(',')]
+            )
+        )
+
+        self.last = tokens[4]
 
     def get_prototype(self):
-        if self.is_virtual:
-            return 'virtual' + self.return_type + ' ' + self.name + '(' + self.args + ');'
-        else:
-            return self.return_type + ' ' + self.name + '(' + self.args + ');'
+        args = ', '.join(self.args)
+        return ('virtual ' if self.is_virtual else '') + self.return_type + ' ' + self.name + '(' + args + ');'
 
     def get_decleration(self):
         pass
@@ -144,7 +152,8 @@ class ClassCreator:
             members='\n\n'.join(
                 filter(
                     lambda x: x != '',
-                    [self._get_members_definitions(access) for access in ['public', 'protected', 'private']]
+                    [self._get_members_definitions(access) for access in [
+                        'public', 'protected', 'private']]
                 )
             ),
 
@@ -160,10 +169,12 @@ class ClassCreator:
 
         head = access_specifier + ':' '\n    '
         methods = '\n    '.join(
-            [method.get_prototype() for method in self.methods if method.access == access_specifier]
+            [method.get_prototype()
+             for method in self.methods if method.access == access_specifier]
         )
         vars = '\n    '.join(
-            [str(variable) for variable in self.variables if variable.access == access_specifier]
+            [str(variable)
+             for variable in self.variables if variable.access == access_specifier]
         )
 
         if not (methods or vars):
