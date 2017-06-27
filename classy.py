@@ -86,8 +86,9 @@ class Method:
         args = ', '.join(self.args)
         return ('virtual ' if self.is_virtual else '') + self.return_type + ' ' + self.name + '(' + args + ');'
 
-    def get_decleration(self):
-        pass
+    def get_decleration(self, class_name=''):
+        args = ', '.join(self.args)
+        return self.return_type + ' ' + class_name + ('::' if class_name else '') + self.name + '(' + args + ') ' + (self.last if self.last == 'const' else '') + '\n{\n\n}'
 
 
 class Variable:
@@ -162,7 +163,10 @@ class ClassCreator:
 
     def create_source_file(self):
         ''' stores string of source file in src '''
-        pass
+        self.src = CONSTANTS['SOURCE_TEMPLATE'].format(
+            include=self._get_hash_include(self.name),
+            functions='\n\n'.join([(method.get_decleration(self.name)) for method in self.methods])
+        )
 
     def _get_members_definitions(self, access_specifier):
         ''' return str of members definitions of access modifier '''
@@ -221,6 +225,7 @@ class ClassCreator:
 
         if self.args.parent:
             self.parents.extend(self.args.parent)
+            pass
 
     def _get_hash_include(self, include_file):
         if include_file in CONSTANTS['STD_LIBRARIES']:
@@ -255,6 +260,7 @@ def main(args):
     creator.create_source_file()
 
     print(creator.hdr)
+    print(creator.src)
 
     # write
     creator.write_files()

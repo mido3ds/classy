@@ -1,5 +1,6 @@
 {
     "HEADER_TEMPLATE": "{top}\n{includes}\nclass {class_name} \n{{\n{members}\n}};\n\n{bottom}",
+    "SOURCE_TEMPLATE": "{include}\n\n{functions}\n",
     "STD_LIBRARIES": [
         "cstdlib",
         "csignal",
