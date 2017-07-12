@@ -31,7 +31,7 @@ def build_parser():
     access.add_argument('-r', '--protected', nargs='+', action='append')
 
     files = parser.add_argument_group('Files')
-    files.add_argument('-o', '--out', nargs='?', default=os.getcwd())
+    files.add_argument('-o', '--out', nargs='?', default=os.getcwd(), const=os.getcwd())
     files.add_argument('-I', '--include', nargs='+')
     files.add_argument('-C', '--conf', nargs='?')
 
@@ -187,8 +187,16 @@ class ClassCreator:
 
     def write_files(self):
         ''' writes src & hdr to out directory '''
-        pass
+        # write hdr
+        hdr_file_name = os.path.join(self.args.out, self.name + '.h')
+        with open(hdr_file_name, 'w') as f:
+            f.write(self.hdr)
 
+        # write src
+        src_file_name = os.path.join(self.args.out, self.name + '.cpp')
+        with open(src_file_name, 'w') as f:
+            f.write(self.src)
+        
     def stylize_files(self):
         ''' runs clang-format to sylize the file if found (or if style is on) '''
         pass
