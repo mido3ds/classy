@@ -11,9 +11,12 @@ CONSTANTS = json.load(open('constants.json'))
 
 # #0: type, #1: name, #2: args, #?3: const|override|=0
 REGEX_FUNC = re.compile(
-    r'(virtual)? ?(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?')
+    r'(virtual)? ?(.+) (\w+) ?\((.*)?\) ? ?(const|override|= ?0)?;?'
+)
 # #?0: unsigned or const, #1: type, #2: name, #?3: value
-REGEX_MEMBER = re.compile(r'(const|unsigned)? ?(\w+) (\w+) ?=? ?(\w+)?')
+REGEX_MEMBER = re.compile(
+    r'''(const|constexpr|unsigned)? ?(\w+) (\w+) ?=? ?("?'?\w+'?"?)?'''
+)
 ######################################################################
 
 
@@ -31,7 +34,8 @@ def build_parser():
     access.add_argument('-r', '--protected', nargs='+', action='append')
 
     files = parser.add_argument_group('Files')
-    files.add_argument('-o', '--out', nargs='?', default=os.getcwd(), const=os.getcwd())
+    files.add_argument('-o', '--out', nargs='?',
+                       default=os.getcwd(), const=os.getcwd())
     files.add_argument('-I', '--include', nargs='+')
     files.add_argument('-C', '--conf', nargs='?')
 
@@ -56,7 +60,7 @@ class Method:
     args = None
     is_virtual = False
     access = None
-    last = None # const|override|= 0
+    last = None  # const|override|= 0
 
     def __init__(self, string, access):
         ''' parse given string into a method '''
@@ -88,7 +92,9 @@ class Method:
 
     def get_decleration(self, class_name=''):
         args = ', '.join(self.args)
-        return self.return_type + ' ' + class_name + ('::' if class_name else '') + self.name + '(' + args + ') ' + (self.last if self.last == 'const' else '') + '\n{\n\n}'
+        return self.return_type + ' ' + class_name +\
+            ('::' if class_name else '') + self.name + '(' + args + ') ' +\
+            (self.last if self.last == 'const' else '') + '\n{\n\n}'
 
 
 class Variable:
@@ -165,7 +171,8 @@ class ClassCreator:
         ''' stores string of source file in src '''
         self.src = CONSTANTS['SOURCE_TEMPLATE'].format(
             include=self._get_hash_include(self.name + '.h'),
-            functions='\n\n'.join([(method.get_decleration(self.name)) for method in self.methods])
+            functions='\n\n'.join(
+                [(method.get_decleration(self.name)) for method in self.methods])
         )
 
     def _get_members_definitions(self, access_specifier):
@@ -200,7 +207,7 @@ class ClassCreator:
         src_file_name = os.path.join(self.args.out, self.name + '.cpp')
         with open(src_file_name, 'w') as f:
             f.write(self.src)
-        
+
     def stylize_files(self):
         ''' runs clang-format to sylize the file if found (or if style is on) '''
         pass
@@ -270,9 +277,6 @@ def main(args):
     # create
     creator.create_header_file()
     creator.create_source_file()
-
-    print(creator.hdr)
-    print(creator.src)
 
     # write
     creator.write_files()
