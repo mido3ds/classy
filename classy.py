@@ -92,9 +92,9 @@ class Method:
 
     def get_decleration(self, class_name=''):
         args = ', '.join(self.args)
-        return self.return_type + ' ' + class_name +\
-            ('::' if class_name else '') + self.name + '(' + args + ') ' +\
-            (self.last if self.last == 'const' else '') + '\n{\n\n}'
+        return (self.return_type + ' ' + class_name +
+            ('::' if class_name else '') + self.name + '(' + args + ') ' +
+            (self.last if self.last == 'const' else '') + '\n{\n\n}')
 
 
 class Variable:
