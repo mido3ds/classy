@@ -164,7 +164,7 @@ class ClassCreator:
     def create_source_file(self):
         ''' stores string of source file in src '''
         self.src = CONSTANTS['SOURCE_TEMPLATE'].format(
-            include=self._get_hash_include(self.name),
+            include=self._get_hash_include(self.name + '.h'),
             functions='\n\n'.join([(method.get_decleration(self.name)) for method in self.methods])
         )
 
@@ -187,6 +187,10 @@ class ClassCreator:
 
     def write_files(self):
         ''' writes src & hdr to out directory '''
+        # create folder
+        if not os.path.exists(self.args.out):
+            os.makedirs(self.args.out)
+
         # write hdr
         hdr_file_name = os.path.join(self.args.out, self.name + '.h')
         with open(hdr_file_name, 'w') as f:
