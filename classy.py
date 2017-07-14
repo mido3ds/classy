@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import json
+import subprocess
 ######################################################################
 CONSTANTS = json.load(open('constants.json'))
 
@@ -210,7 +211,15 @@ class ClassCreator:
 
     def stylize_files(self):
         ''' runs clang-format to sylize the file if found (or if style is on) '''
-        pass
+        command = 'clang-format -i -style={style} {files}'.format(
+            style=self.args.style,
+            files=self.args.out + '/' + self.name + '.h' + ' ' + self.args.out + '/' + self.name + '.cpp'
+        ).split(' ')
+
+        try:
+            subprocess.check_call(command)
+        except subprocess.CalledProcessError:
+            print('error happened with clang-format, check that you have `clang-format` installed')
 
     def _get_header_guards(self):
         ''' return top and down header guards of class name '''
